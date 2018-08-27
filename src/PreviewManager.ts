@@ -20,7 +20,8 @@ export default class PreviewManager {
         this.htmlDocumentContentProvider.generateHTML();
         // subscribe to selection change event
         let subscriptions: vscode.Disposable[] = [];
-        vscode.window.onDidChangeTextEditorSelection(this.onEvent, this, subscriptions)
+        //vscode.window.onDidChangeTextEditorSelection(this.onEvent, this, subscriptions)
+        vscode.workspace.onDidSaveTextDocument(this.onEvent, this, subscriptions);
         this.disposable = vscode.Disposable.from(...subscriptions);
     }
 

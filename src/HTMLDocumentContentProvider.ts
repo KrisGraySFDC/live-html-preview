@@ -22,10 +22,33 @@ export default class HTMLDocumentContentProvider implements vscode.TextDocumentC
     };
 
     public generateHTML(): string {
-        let plainText: string = this._textEditor.document.getText();
-        let html = this.fixLinks(plainText);
-        let htmlWithStyle = this.addStyles(html);
-        return htmlWithStyle;
+        const plainText: string = this._textEditor.document.getText();
+        // let html = this.fixLinks(plainText);
+        // let htmlWithStyle = this.addStyles(html);
+        // return htmlWithStyle;
+        const html = `
+            <!DOCTYPE html>
+            <html lang="en">
+
+            <head>
+                <meta charset="UTF-8">
+                <title></title>
+                <link rel="shortcut icon" href="/favicon.png" type="image/png">
+                <link rel="stylesheet" href="assets/styles/salesforce-lightning-design-system.css">
+                <link rel="stylesheet" href="style.css"> 
+            </head>
+
+            <body id="content">
+                <script src="app.js"></script>
+
+                <hr/>
+                ${plainText}
+            </body>
+
+            </html>
+        `;
+        
+        return this.fixLinks(html);
     }
 
     // Thanks to Thomas Haakon Townsend for coming up with this regex
@@ -37,23 +60,19 @@ export default class HTMLDocumentContentProvider implements vscode.TextDocumentC
                 return [
                     p1,
                     vscode.Uri.file(path.join(
-                        path.dirname(documentFileName),
+                        //path.dirname(documentFileName),
+                        `/Users/kgray/Dev/hackathon1/dist`,
                         p2
                     )),
                     p3
                 ].join("");
             }
         );
-
-
-
     }
-
 
     public update(uri: vscode.Uri) {
         this._onDidChange.fire(uri);
     }
-
 
     // Add styles to the current HTML so that it is displayed corectly in VS Code
     private addStyles(html: string): string {
